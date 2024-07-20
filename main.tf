@@ -91,7 +91,7 @@ resource "aws_instance" "Swarm_worker" {
   count         = 3
   ami           = "ami-03c7d01cf4dedc891" # us-east-1
   instance_type = "t2.micro"
-  key_name   = "devops"
+  key_name   = "AmazonKEY"
   subnet_id = aws_subnet.Swarm_Publicsubnet.id
   vpc_security_group_ids = [aws_security_group.Swarm_SG.id]
 
