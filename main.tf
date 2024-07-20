@@ -9,7 +9,7 @@ resource "aws_vpc" "Swarm_VPC" {
 
 // Create Subnet
 resource "aws_subnet" "Swarm_Publicsubnet" {
-  vpc_id     = aws_vpc.my_VPC.id
+  vpc_id     = aws_vpc.Swarm_VPC.id
   cidr_block = "10.10.1.0/24"
 
   tags = {
@@ -19,7 +19,7 @@ resource "aws_subnet" "Swarm_Publicsubnet" {
 
 // Create Internet Gateway
 resource "aws_internet_gateway" "Swarm_gw" {
-  vpc_id = aws_vpc.my_VPC.id
+  vpc_id = aws_vpc.Swarm_VPC.id
 
   tags = {
     Name = "Swarm_gw"
