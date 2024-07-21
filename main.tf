@@ -97,6 +97,7 @@ resource "aws_instance" "worker" {
 }
 
 resource "aws_instance" "ansible" {
+  count = 1
   instance_type = "t2.micro"
   ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
   subnet_id = aws_subnet.instance.id
