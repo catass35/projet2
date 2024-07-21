@@ -113,18 +113,6 @@ resource "aws_instance" "Swarm_ansible" {
   }
 }
 
-output "instance_private_ip" {
-  value = aws_instance.Swarm_master.private_ip
-}
-
-output "instance_private_ip" {
-  value = aws_instance.Swarm_worker.private_ip
-}
-
-output "instance_private_ip" {
-  value = aws_instance.Swarm_ansible.private_ip
-}
-
 // Provision a public subnet in the VPC
 
 resource "aws_subnet" "Swarm_public-subnet" {
