@@ -63,22 +63,6 @@ resource "aws_security_group" "securitygroup" {
 }
 
 resource "aws_instance" "master" {
-  instance_type = "t2.micro"
-  ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
-  subnet_id = aws_subnet.instance.id
-  security_groups = [aws_security_group.securitygroup.id]
-  key_name = aws_key_pair.ssh.key_name
-  disable_api_termination = false
-  ebs_optimized = false
-  root_block_device {
-    volume_size = "10"
-  }
-  tags = {
-    Name = "master-${count.index + 1}"
-  }
-}
-
-resource "aws_instance" "worker" {
   count = 2
   instance_type = "t2.micro"
   ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
@@ -91,7 +75,7 @@ resource "aws_instance" "worker" {
     volume_size = "10"
   }
   tags = {
-    Name = "worker-${count.index + 1}"
+    Name = "master-${count.index + 1}"
   }
 }
 
