@@ -34,6 +34,7 @@ resource "aws_key_pair" "Swarm_key-pair" {
 
 output "ssh_private_key_pem" {
   value = tls_private_key.Swarm_tls-private-key.private_key_pem
+  sensitive = true
 }
 
 output "ssh_public_key_pem" {
