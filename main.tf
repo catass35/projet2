@@ -33,6 +33,7 @@ resource "aws_key_pair" "ssh" {
 }
 
 output "ssh_private_key_pem" {
+  sensitive = true
   value = tls_private_key.ssh.private_key_pem
 }
 
