@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = "eu-central-1a"
 }
 
 resource "aws_vpc" "Swarm_vpc" {
@@ -14,7 +14,7 @@ resource "aws_vpc" "Swarm_vpc" {
 // Provision a private subnet in the VPC
 
 resource "aws_subnet" "Swarm_private-subnet" {
-  availability_zone = "eu-central-1"
+  availability_zone = "eu-central-1a"
   cidr_block = "10.0.1.0/24"
   vpc_id = aws_vpc.Swarm_vpc.id
   tags = {
@@ -117,7 +117,7 @@ resource "aws_instance" "Swarm_ansible" {
 // Provision a public subnet in the VPC
 
 resource "aws_subnet" "Swarm_public-subnet" {
-  availability_zone = "eu-central-1"
+  availability_zone = "eu-central-1a"
   cidr_block = "10.0.2.0/24"
   vpc_id = aws_vpc.Swarm_vpc.id
   tags = {
