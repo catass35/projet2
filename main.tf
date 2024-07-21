@@ -17,6 +17,11 @@ resource "aws_subnet" "Swarm_Publicsubnet" {
   }
 }
 
+// Create EIC Endpoint
+resource "aws_ec2_instance_connect_endpoint" "Swarm_EIC_Endpoint" {
+  subnet_id = aws_subnet.Swarm_Publicsubnet.id
+}
+
 // Create Internet Gateway
 resource "aws_internet_gateway" "Swarm_gw" {
   vpc_id = aws_vpc.Swarm_VPC.id
