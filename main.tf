@@ -69,7 +69,7 @@ resource "aws_instance" "Swarm_master" {
   ami = "ami-03c7d01cf4dedc891"
   subnet_id = aws_subnet.Swarm_private-subnet.id
   security_groups = [aws_security_group.Swarm_private-securitygroup.id]
-  key_name = aws_key_pair.Swarm_tls-private-key.key_name
+  key_name = aws_key_pair.Swarm_key-pair.key_name
   disable_api_termination = false
   ebs_optimized = false
   root_block_device {
@@ -86,7 +86,7 @@ resource "aws_instance" "Swarm_worker" {
   ami = "ami-03c7d01cf4dedc891"
   subnet_id = aws_subnet.Swarm_private-subnet.id
   security_groups = [aws_security_group.Swarm_private-securitygroup.id]
-  key_name = aws_key_pair.Swarm_tls-private-key.key_name
+  key_name = aws_key_pair.Swarm_key-pair.key_name
   disable_api_termination = false
   ebs_optimized = false
   root_block_device {
@@ -102,7 +102,7 @@ resource "aws_instance" "Swarm_ansible" {
   ami = "ami-03c7d01cf4dedc891"
   subnet_id = aws_subnet.Swarm_private-subnet.id
   security_groups = [aws_security_group.Swarm_private-securitygroup.id]
-  key_name = aws_key_pair.Swarm_tls-private-key.key_name
+  key_name = aws_key_pair.Swarm_key-pair.key_name
   disable_api_termination = false
   ebs_optimized = false
   root_block_device {
@@ -184,7 +184,7 @@ resource "aws_instance" "Swarm_ec2jumphost" {
   ami = "ami-03c7d01cf4dedc891"
   subnet_id = aws_subnet.Swarm_public-subnet.id
   security_groups = [aws_security_group.Swarm_private-securitygroup.id]
-  key_name = aws_key_pair.Swarm_tls-private-key.key_name
+  key_name = aws_key_pair.Swarm_key-pair.key_name
   disable_api_termination = false
   ebs_optimized = false
   root_block_device {
