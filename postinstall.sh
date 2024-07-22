@@ -7,6 +7,9 @@ terraform output ssh_private_key_pem > key.txt
 # Define the file you want to write to
 output_file="ssh_banner"
 
+# Locally create the banner file
+touch $output_file
+
 # Define some variables
 jumphost_ips="jumphost ip $(terraform output jumphost_ip | tr -d '"')"
 nat_gateway_ips="nat gateway ip $(terraform output nat_gateway_ip | tr -d '"')"
@@ -16,15 +19,17 @@ worker_ips="worker ip $(terraform output worker_ips | tr -d '"')"
 
 # Use a here document to write multiple lines to the file, including variables
 cat <<EOF > "$output_file"
-$jumphost_ips
-
-$nat_gateway_ips
-
-$ansible_ips
-
-$master_ips
-
-$worker_ips
+******************************************************
+** $jumphost_ips **
+**                                                  **
+** $nat_gateway_ips **
+**                                                  **
+** $ansible_ips **
+**                                                  **
+** $master_ips **
+**                                                  **
+** $worker_ips **
+******************************************************
 EOF
 
 # Copy file to jumphost
