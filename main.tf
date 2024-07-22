@@ -97,6 +97,11 @@ resource "aws_instance" "master" {
   }
 }
 
+output "master_ips" {
+  description = "The private IP addresses of the swarm masters"
+  value       = aws_instance.master.*.private_ip
+}
+
 resource "aws_instance" "worker" {
   count = 3
   instance_type = "t2.micro"
@@ -114,6 +119,11 @@ resource "aws_instance" "worker" {
   }
 }
 
+output "worker_ips" {
+  description = "The private IP addresses of the swarm workers"
+  value       = aws_instance.worker.*.private_ip
+}
+
 resource "aws_instance" "ansible" {
   count = 1
   instance_type = "t2.micro"
@@ -129,6 +139,11 @@ resource "aws_instance" "ansible" {
   tags = {
     Name = "ansible-${count.index + 1}"
   }
+}
+
+output "ansible_ips" {
+  description = "The private IP addresses of the ansible instances"
+  value       = aws_instance.ansible.*.private_ip
 }
 
 resource "aws_subnet" "nat_gateway" {
@@ -211,5 +226,6 @@ resource "aws_eip" "jumphost" {
 }
 
 output "jumphost_ip" {
+  description = "The public IP addresse of the jumphost"
   value = aws_eip.jumphost.public_ip
 }
