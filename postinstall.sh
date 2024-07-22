@@ -37,8 +37,9 @@ local_destination="ssh_banner"
 # Use scp with StrictHostKeyChecking=no to copy the file
 scp -o StrictHostKeyChecking=no -i key.txt "${remote_user}@${remote_host}:${remote_file}" "${local_destination}"
 
-ssh -o StrictHostKeyChecking=no -i key.txt "${remote_user}@${remote_host} ""
+# Update ssh banner
+ssh -o StrictHostKeyChecking=no -i key.txt "${remote_user}@${remote_host} "old_banner_line=$(/etc/ssh/sshd_config | grep Banner) | sudo sed -i "s|$old_banner_line|Banner $remote_file|g" "/etc/ssh/sshd_config" | sudo systemctl restart sshd"
 
-
-echo "ssh -i key.txt ubuntu@$(terraform output jumphost_ip | tr -d '"')"
+# Echo command to connect to jumphost
+echo "To connect to jumphost 'ssh -i key.txt ubuntu@$(terraform output jumphost_ip | tr -d '"')'"
 
