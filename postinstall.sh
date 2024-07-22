@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# store key in file
+terraform output ssh_private_key_pem > key.txt
+
+# create infra display ssh banner
+# Define the file you want to write to
+output_file="ssh_banner"
+
+# Define some variables
+jumphost_ips="jumphost ip $(terraform output jumphost_ip | tr -d '"')"
+nat_gateway_ips="nat gateway ip $(terraform output nat_gateway_ip | tr -d '"')"
+ansible_ips="ansible ip $(terraform output ansible_ips | tr -d '"')"
+master_ips="master ip $(terraform output master_ips | tr -d '"')"
+worker_ips="worker ip $(terraform output worker_ips | tr -d '"')"
+
+# Use a here document to write multiple lines to the file, including variables
+cat <<EOF > "$output_file"
+$jumphost_ips
+
+$nat_gateway_ips
+
+$ansible_ips
+
+$master_ips
+
+$worker_ips
+EOF
+
+# Copy file to jumphost
+# Define variables
+remote_user="ubuntu"
+remote_host=$(terraform output jumphost_ip | tr -d '"')"
+remote_file="/etc/ssh/ssh_banner"
+local_destination="ssh_banner"
+
+# Use scp with StrictHostKeyChecking=no to copy the file
+scp -o StrictHostKeyChecking=no -i key.txt "${remote_user}@${remote_host}:${remote_file}" "${local_destination}"
+
+ssh -o StrictHostKeyChecking=no -i key.txt "${remote_user}@${remote_host} ""
+
+
+echo "ssh -i key.txt ubuntu@$(terraform output jumphost_ip | tr -d '"')"
+
