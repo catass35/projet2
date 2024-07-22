@@ -53,3 +53,6 @@ echo "To connect to jumphost 'ssh -i key.txt ubuntu@$(terraform output jumphost_
 # Modify ssh banner
 echo "Then edit /etc/ssh/sshd_config '#Banner /etc/issue.net' by '/home/ubuntu/ssh_banner'"
 echo 'sudo systemctl restart sshd'
+
+# Copy key to jumphost
+scp -o StrictHostKeyChecking=no -i key.txt key.txt "${remote_user}@${remote_host}:${remote_file}
