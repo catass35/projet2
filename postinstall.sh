@@ -51,7 +51,7 @@ scp -o StrictHostKeyChecking=no -i key.txt "${local_destination}" "${remote_user
 echo "To connect to jumphost 'ssh -i key.txt ubuntu@$(terraform output jumphost_ip | tr -d '"')'"
 
 # Modify ssh banner
-echo "Then edit /etc/ssh/sshd_config '#Banner /etc/issue.net' by '/home/ubuntu/ssh_banner'"
+echo 'Then edit /etc/ssh/sshd_config "#Banner /etc/issue.net" by "/home/ubuntu/ssh_banner"'
 echo "Then type 'sudo systemctl restart sshd'"
 
 # Copy key to jumphost
