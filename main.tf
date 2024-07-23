@@ -100,6 +100,13 @@ resource "aws_instance" "Cluster_master" {
     sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hostname
     hostname Cluster_master
     exec bash
+
+    # Install docker
+    apt-get update
+    apt-get install docker.io
+
+    # Initialize swarm cluster
+    docker swarm init --advertise-addr $(ip a show eth0 | grep 'inet ' | awk {'print $2'} | cut -d/ -f1)
   EOF
   tags = {
     Name = "Cluster_master"
@@ -131,6 +138,10 @@ resource "aws_instance" "master" {
     sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
     hostname master-${count.index + 1}
     exec bash
+
+    # Install docker
+    apt-get update
+    apt-get install docker.io
   EOF
   tags = {
     Name = "master-${count.index + 1}"
@@ -162,6 +173,10 @@ resource "aws_instance" "worker" {
     sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
     hostname worker-${count.index + 1}
     exec bash
+
+    # Install docker
+    apt-get update
+    apt-get install docker.io
   EOF
   tags = {
     Name = "worker-${count.index + 1}"
