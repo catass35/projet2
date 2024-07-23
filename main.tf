@@ -100,7 +100,7 @@ resource "aws_instance" "Cluster_master" {
     sudo chmod 600 /home/ubuntu/.ssh/id_rsa
     # Install docker
     sudo apt-get update
-    sudo apt-get install docker.io
+    sudo apt-get install docker.io -y
     # Initialize swarm cluster
     sudo docker swarm init --advertise-addr $(ip a show eth0 | grep 'inet ' | awk {'print $2'} | cut -d/ -f1)
     # Change hostname
@@ -138,7 +138,7 @@ resource "aws_instance" "master" {
     sudo chmod 600 /home/ubuntu/.ssh/id_rsa
     # Install docker
     sudo apt-get update
-    sudo apt-get install docker.io
+    sudo apt-get install docker.io -y
     # Change hostname
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
@@ -174,7 +174,7 @@ resource "aws_instance" "worker" {
     sudo chmod 600 /home/ubuntu/.ssh/id_rsa
     # Install docker
     sudo apt-get update
-    sudo apt-get install docker.io
+    sudo apt-get install docker.io -y
     # Change hostname
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
