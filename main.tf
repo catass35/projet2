@@ -106,7 +106,7 @@ resource "aws_instance" "Cluster_master" {
     # Change hostname
     sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hostname
-    sudo hostname Cluster_master
+    sudo hostname Cluster-master
   EOF
   tags = {
     Name = "Cluster_master"
