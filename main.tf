@@ -92,8 +92,16 @@ resource "aws_instance" "Cluster_master" {
   root_block_device {
     volume_size = "10"
   }
+  user_data = <<-EOF
+    #! /bin/bash
+
+    # Change hostname
+    sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hostname
+    sudo exec bash
+  EOF
   tags = {
-    Name = "Cluster_master-${count.index}"
+    Name = "Cluster_master"
   }
 }
 
