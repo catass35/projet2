@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   enable_dns_support = true
   tags = {
-    "Name" = "Dummy"
+    "Name" = "Swarm_VPC"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_subnet" "instance" {
   cidr_block = "10.0.1.0/24"
   vpc_id = aws_vpc.vpc.id
   tags = {
-    "Name" = "DummySubnetInstance"
+    "Name" = "Swarm_SubnetInstance"
   }
 }
 
@@ -28,7 +28,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "aws_key_pair" "ssh" {
-  key_name = "DummyMachine"
+  key_name = "JumphostMachine"
   public_key = tls_private_key.ssh.public_key_openssh
 }
 
@@ -42,8 +42,8 @@ output "ssh_public_key_pem" {
 }
 
 resource "aws_security_group" "securitygroup" {
-  name = "DummySecurityGroup"
-  description = "DummySecurityGroup"
+  name = "SwarmSecurityGroup"
+  description = "SwarmSecurityGroup"
   vpc_id = aws_vpc.vpc.id
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
@@ -76,7 +76,7 @@ resource "aws_security_group" "securitygroup" {
     protocol = "-1"
   }
   tags = {
-    "Name" = "DummySecurityGroup"
+    "Name" = "SwarmSecurityGroup"
   }
 }
 
@@ -173,14 +173,14 @@ resource "aws_subnet" "nat_gateway" {
   cidr_block = "10.0.2.0/24"
   vpc_id = aws_vpc.vpc.id
   tags = {
-    "Name" = "DummySubnetNAT"
+    "Name" = "SwarmSubnetNAT"
   }
 }
 
 resource "aws_internet_gateway" "nat_gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    "Name" = "DummyGateway"
+    "Name" = "SwarmGateway"
   }
 }
 
@@ -205,7 +205,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_gateway.id
   subnet_id = aws_subnet.nat_gateway.id
   tags = {
-    "Name" = "DummyNatGateway"
+    "Name" = "SwarmNatGateway"
   }
 }
 
@@ -240,11 +240,11 @@ resource "aws_instance" "ec2jumphost" {
   user_data = <<-EOF
     #! /bin/bash
     # Copy private key
-    echo "aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    echo "${aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
     chmod 600 /home/ubuntu/.ssh/id_rsa
   EOF
   tags = {
-    "Name" = "DummyMachineJumphost"
+    "Name" = "SwarmMachineJumphost"
   }
 }
 
