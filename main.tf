@@ -81,7 +81,6 @@ resource "aws_security_group" "securitygroup" {
 }
 
 resource "aws_instance" "Cluster_master" {
-  count = 1
   instance_type = "t2.micro"
   ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
   subnet_id = aws_subnet.instance.id
@@ -115,7 +114,7 @@ resource "aws_instance" "Cluster_master" {
 
 output "Cluster_master_ips" {
   description = "The private IP addresses of the swarm masters"
-  value       = aws_instance.Cluster_master.*.private_ip
+  value       = aws_instance.Cluster_master.private_ip
 }
 
 resource "aws_instance" "master" {
@@ -130,6 +129,9 @@ resource "aws_instance" "master" {
   root_block_device {
     volume_size = "10"
   }
+  depends_on = [
+    aws_instance.Cluster_master
+  ]
   user_data = <<-EOF
     #! /bin/bash
     # Copy private key
@@ -139,6 +141,10 @@ resource "aws_instance" "master" {
     # Install docker
     sudo apt-get update
     sudo apt-get install docker.io -y
+    # Join swarm cluster as manager
+    token=$(su -c 'ssh -o StrictHostKeyChecking=no ubuntu@${aws_instance.Cluster_master.private_ip} "sudo docker swarm join-token manager"' ubuntu)
+    join=$(echo $join | awk -F "command: " '{print $2}')
+    $join
     # Change hostname
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
@@ -166,6 +172,9 @@ resource "aws_instance" "worker" {
   root_block_device {
     volume_size = "10"
   }
+  depends_on = [
+    aws_instance.Cluster_master
+  ]
   user_data = <<-EOF
     #! /bin/bash
     # Copy private key
@@ -175,6 +184,10 @@ resource "aws_instance" "worker" {
     # Install docker
     sudo apt-get update
     sudo apt-get install docker.io -y
+    # Join swarm cluster as worker
+    token=$(su -c 'ssh -o StrictHostKeyChecking=no ubuntu@${aws_instance.Cluster_master.private_ip} "sudo docker swarm join-token worker"' ubuntu)
+    join=$(echo $join | awk -F "command: " '{print $2}')
+    $join
     # Change hostname
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
