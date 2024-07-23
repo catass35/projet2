@@ -144,7 +144,7 @@ resource "aws_instance" "master" {
     # Join swarm cluster as manager
     token=$(su -c 'ssh -o StrictHostKeyChecking=no ubuntu@${aws_instance.Cluster_master.private_ip} "sudo docker swarm join-token manager"' ubuntu)
     join=$(echo $join | awk -F "command: " '{print $2}')
-    $join
+    $join > /home/ubuntu/rapport.txt
     # Change hostname
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
@@ -187,7 +187,7 @@ resource "aws_instance" "worker" {
     # Join swarm cluster as worker
     token=$(su -c 'ssh -o StrictHostKeyChecking=no ubuntu@${aws_instance.Cluster_master.private_ip} "sudo docker swarm join-token worker"' ubuntu)
     join=$(echo $join | awk -F "command: " '{print $2}')
-    $join
+    $join > /home/ubuntu/rapport.txt
     # Change hostname
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
     sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
