@@ -80,8 +80,30 @@ resource "aws_security_group" "securitygroup" {
   }
 }
 
+resource "aws_instance" "Cluster_master" {
+  count = 1
+  instance_type = "t2.micro"
+  ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
+  subnet_id = aws_subnet.instance.id
+  security_groups = [aws_security_group.securitygroup.id]
+  key_name = aws_key_pair.ssh.key_name
+  disable_api_termination = false
+  ebs_optimized = false
+  root_block_device {
+    volume_size = "10"
+  }
+  tags = {
+    Name = "Cluster_master-${count.index}"
+  }
+}
+
+output "Cluster_master_ips" {
+  description = "The private IP addresses of the swarm masters"
+  value       = aws_instance.Cluster_master.*.private_ip
+}
+
 resource "aws_instance" "master" {
-  count = 2
+  count = 1
   instance_type = "t2.micro"
   ami = "ami-03d8059563982d7b0" # https://cloud-images.ubuntu.com/locator/ec2/ (Ubuntu)
   subnet_id = aws_subnet.instance.id
@@ -215,6 +237,12 @@ resource "aws_instance" "ec2jumphost" {
   root_block_device {
     volume_size = "10"
   }
+  user_data = << EOF
+    #! /bin/bash
+    # Copy private key
+    echo "aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    chmod 600 /home/ubuntu/.ssh/id_rsa
+    EOF
   tags = {
     "Name" = "DummyMachineJumphost"
   }
