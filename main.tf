@@ -158,6 +158,13 @@ resource "aws_instance" "ansible" {
   root_block_device {
     volume_size = "10"
   }
+  user_data = <<-EOF
+    #! /bin/bash
+    # Copy private key
+    echo "${aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+    chmod 600 /home/ubuntu/.ssh/id_rsa
+  EOF
   tags = {
     Name = "ansible-${count.index + 1}"
   }
