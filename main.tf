@@ -161,7 +161,7 @@ resource "aws_instance" "ansible" {
   user_data = <<-EOF
     #! /bin/bash
     # Copy private key
-    echo "${aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
     chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
     chmod 600 /home/ubuntu/.ssh/id_rsa
   EOF
@@ -247,7 +247,7 @@ resource "aws_instance" "ec2jumphost" {
   user_data = <<-EOF
     #! /bin/bash
     # Copy private key
-    echo "${aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
     chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
     chmod 600 /home/ubuntu/.ssh/id_rsa
   EOF
