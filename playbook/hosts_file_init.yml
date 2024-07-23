@@ -1,0 +1,6 @@
+---
+- name: Initialize hosts file
+  hosts: all
+  become: yes
+  roles:
+    - init_hosts_file
