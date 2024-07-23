@@ -96,17 +96,17 @@ resource "aws_instance" "Cluster_master" {
     #! /bin/bash
 
     # Change hostname
-    sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hosts
-    sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hostname
+    sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/Cluster_master/g" /etc/hostname
     hostname Cluster_master
     exec bash
 
     # Install docker
-    apt-get update
-    apt-get install docker.io
+    sudo apt-get update
+    sudo apt-get install docker.io
 
     # Initialize swarm cluster
-    docker swarm init --advertise-addr $(ip a show eth0 | grep 'inet ' | awk {'print $2'} | cut -d/ -f1)
+    sudo docker swarm init --advertise-addr $(ip a show eth0 | grep 'inet ' | awk {'print $2'} | cut -d/ -f1)
   EOF
   tags = {
     Name = "Cluster_master"
@@ -134,14 +134,14 @@ resource "aws_instance" "master" {
     #! /bin/bash
 
     # Change hostname
-    sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
-    sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
+    sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
     hostname master-${count.index + 1}
     exec bash
 
     # Install docker
-    apt-get update
-    apt-get install docker.io
+    sudo apt-get update
+    sudo apt-get install docker.io
   EOF
   tags = {
     Name = "master-${count.index + 1}"
@@ -169,14 +169,14 @@ resource "aws_instance" "worker" {
     #! /bin/bash
 
     # Change hostname
-    sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
-    sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
+    sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
     hostname worker-${count.index + 1}
     exec bash
 
     # Install docker
-    apt-get update
-    apt-get install docker.io
+    sudo apt-get update
+    sudo apt-get install docker.io
   EOF
   tags = {
     Name = "worker-${count.index + 1}"
@@ -204,15 +204,21 @@ resource "aws_instance" "ansible" {
     #! /bin/bash
 
     # Change hostname
-    sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hosts
-    sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hostname
+    sudo sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hostname
     hostname ansible-${count.index + 1}
     exec bash
 
     # Copy private key
     echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
-    chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
-    chmod 600 /home/ubuntu/.ssh/id_rsa
+    sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+    sudo chmod 600 /home/ubuntu/.ssh/id_rsa
+
+    # Install ansible
+    sudo apt-get update
+    sudo apt-add-repository ppa:ansible/ansible -y
+    sudo apt-get update
+    sudo apt-get install ansible -y
   EOF
   tags = {
     Name = "ansible-${count.index + 1}"
@@ -297,15 +303,15 @@ resource "aws_instance" "ec2jumphost" {
     #! /bin/bash
 
     # Change hostname
-    sed -i "s/$HOSTNAME/jumphost/g" /etc/hosts
-    sed -i "s/$HOSTNAME/jumphost/g" /etc/hostname
+    sudo sed -i "s/$HOSTNAME/jumphost/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/jumphost/g" /etc/hostname
     hostname jumphost
     exec bash
 
     # Copy private key
     echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
-    chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
-    chmod 600 /home/ubuntu/.ssh/id_rsa
+    sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+    sudo chmod 600 /home/ubuntu/.ssh/id_rsa
   EOF
   tags = {
     "Name" = "SwarmMachineJumphost"
