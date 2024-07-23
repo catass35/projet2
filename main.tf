@@ -241,6 +241,7 @@ resource "aws_instance" "ec2jumphost" {
     #! /bin/bash
     # Copy private key
     echo "${aws_key_pair.ssh.private_key}" > /home/ubuntu/.ssh/id_rsa
+    chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
     chmod 600 /home/ubuntu/.ssh/id_rsa
   EOF
   tags = {
