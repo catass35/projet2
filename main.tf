@@ -114,6 +114,14 @@ resource "aws_instance" "master" {
   root_block_device {
     volume_size = "10"
   }
+  user_data = <<-EOF
+    #! /bin/bash
+
+    # Change hostname
+    sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/master-${count.index + 1}/g" /etc/hostname
+    sudo exec bash
+  EOF
   tags = {
     Name = "master-${count.index + 1}"
   }
@@ -136,6 +144,14 @@ resource "aws_instance" "worker" {
   root_block_device {
     volume_size = "10"
   }
+  user_data = <<-EOF
+    #! /bin/bash
+
+    # Change hostname
+    sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/worker-${count.index + 1}/g" /etc/hostname
+    sudo exec bash
+  EOF
   tags = {
     Name = "worker-${count.index + 1}"
   }
@@ -160,6 +176,12 @@ resource "aws_instance" "ansible" {
   }
   user_data = <<-EOF
     #! /bin/bash
+
+    # Change hostname
+    sudo sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/ansible-${count.index + 1}/g" /etc/hostname
+    sudo exec bash
+
     # Copy private key
     echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
     chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
@@ -246,6 +268,12 @@ resource "aws_instance" "ec2jumphost" {
   }
   user_data = <<-EOF
     #! /bin/bash
+
+    # Change hostname
+    sudo sed -i "s/$HOSTNAME/jumphost/g" /etc/hosts
+    sudo sed -i "s/$HOSTNAME/jumphost/g" /etc/hostname
+    sudo exec bash
+
     # Copy private key
     echo "${tls_private_key.ssh.private_key_pem}" > /home/ubuntu/.ssh/id_rsa
     chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
