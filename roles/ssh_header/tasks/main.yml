@@ -1,0 +1,20 @@
+---
+- name: Create SSH header file
+  template:
+    src: ssh_header.j2
+    dest: /etc/ssh/ssh_header
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure SSH to use header
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Banner'
+    line: 'Banner /etc/ssh/ssh_header'
+    create: yes
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted
