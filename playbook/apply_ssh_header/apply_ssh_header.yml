@@ -1,0 +1,6 @@
+---
+- name: Apply SSH header
+  hosts: all
+  become: yes
+  roles:
+    - ssh_header
