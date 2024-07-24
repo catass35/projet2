@@ -62,6 +62,7 @@ https://dev.betterdoc.org/infrastructure/2020/02/04/setting-up-a-nat-gateway-on-
 - [x] Ajouter user_data a master 1 pour (copier la clé privée), installer docker et initialiser le cluster swarm
 - [x] Ajouter user_data a master 2 pour (copier la clé privée), installer docker et join le cluster comme manager (depends_on)
 - [x] Ajouter user_data aux worker pour (copier la clé privée), installer docker et join le cluster (depends_on)
-- [ ] Ajouter user_data a ansible pour copier la clé privée, installer ansible, initialiser l'inventaire et copier les playbooks
-- [ ] Playbook pour éditer le fichier /ect/hosts avec les alias des instances de l'infrastructure et leurs ips
+- [ ] Ajouter user_data a ansible pour copier la clé privée,installer ansible, initialiser l'inventaire, copier les playbooks et les executer
+- [x] Playbook pour éditer le fichier /ect/hosts avec les alias des instances de l'infrastructure et leurs ips
+- [x] Playbook pour éditer le fichier le header ssh avec les alias des instances de l'infrastructure et leurs ips
 ```
