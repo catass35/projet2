@@ -1,0 +1,8 @@
+#############################################################
+# This is an automatically generated SSH banner.            #
+# Do not modify this file directly.                         #
+#############################################################
+
+{% for host in groups['all'] %}
+Host: {{ host }} - IP: {{ hostvars[host]['ansible_host'] }}
+{% endfor %}
