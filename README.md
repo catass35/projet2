@@ -7,6 +7,10 @@ Ce dépôt contient une configuration Terraform pour configurer un cluster Docke
 - Terraform v0.12+
 - AWS CLI configuré avec les droits d'accès appropriés
 
+## Schéma d'infrastructure
+
+![image](https://github.com/user-attachments/assets/432d61ac-82fb-4a05-bcb3-700912221bf0)
+
 ## Résumé
 
 La configuration Terraform dans `main.tf` effectue les opérations suivantes :
@@ -50,8 +54,6 @@ Le fichier `main.tf` génère également plusieurs outputs :
 ## Documentation de référence
 
 https://dev.betterdoc.org/infrastructure/2020/02/04/setting-up-a-nat-gateway-on-aws-using-terraform.html
-
-![terraform_swam_schema](https://github.com/user-attachments/assets/af33a7c3-1f97-475b-adbc-26facbd522df)
 
 ## Todo list
 
